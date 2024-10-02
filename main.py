@@ -1,3 +1,6 @@
+# this file mostly handle the visualization
+
+
 import matplotlib.pyplot as plt
 import pandas as pd
 import matplotlib.animation as animation
