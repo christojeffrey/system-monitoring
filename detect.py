@@ -1,19 +1,14 @@
 import numpy as np
-from filterpy.kalman import KalmanFilter
 
 WORKING_RANGE_MIN = 10
 WORKING_RANGE_MAX = 90
-
+WINDOW_SIZE = 10
+ANOMALY_THRESHOLD = 2.5
 class AnomalyDetector:
     def __init__(self):
-        self.kf = KalmanFilter(dim_x=2, dim_z=1)
-        self.kf.x = np.array([50., 0.])  # Initial state (position and velocity)
-        self.kf.F = np.array([[1., 1.], [0., 1.]])  # State transition matrix
-        self.kf.H = np.array([[1., 0.]])  # Measurement function
-        self.kf.P *= 1000.  # Covariance matrix
-        self.kf.R = 5  # Measurement noise
-        self.kf.Q = np.array([[0.1, 0.1], [0.1, 0.1]])  # Process noise
+        self.window = []
 
+   
     def detect(self, data):
         temp = data['Temperature'].iloc[-1]
         
@@ -21,16 +16,22 @@ class AnomalyDetector:
         if temp < WORKING_RANGE_MIN or temp > WORKING_RANGE_MAX:
             return True, "Out of working range"
 
-        # Kalman filter prediction and update
-        self.kf.predict()
-        self.kf.update(temp)
+        # Add the new temperature to the window
+        self.window.append(temp)
+        if len(self.window) > WINDOW_SIZE:
+            self.window.pop(0)
 
-        # Calculate the difference between predicted and actual temperature
-        predicted_temp = self.kf.x[0]
-        temp_diff = abs(predicted_temp - temp)
+        # If we don't have enough data points yet, return normal
+        if len(self.window) < WINDOW_SIZE:
+            return False, "Normal"
 
-        # If the difference is more than 3 times the measurement noise, consider it an anomaly
-        if temp_diff > 3 * np.sqrt(self.kf.R):
+        # Calculate moving average and standard deviation
+        moving_avg = np.mean(self.window)
+        moving_std = np.std(self.window)
+
+        # If the current temperature deviates significantly from the moving average,
+        # consider it an anomaly
+        if abs(temp - moving_avg) > ANOMALY_THRESHOLD * moving_std:
             return True, "Contextual anomaly"
 
         return False, "Normal"
