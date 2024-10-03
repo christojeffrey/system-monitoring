@@ -1,12 +1,11 @@
 import matplotlib.pyplot as plt
 import pandas as pd
 import matplotlib.animation as animation
-
 from machine_temperature_data.data import MachineTemperatureData
 from detector.detector import detect
 
 # Initialize data
-data = MachineTemperatureData(20, 80, 80, 0.2, 0.2)
+data = MachineTemperatureData(20, 80, 80, 0.1, 0.2)
 
 def setupPlot():
     # Create figure and axis
@@ -30,31 +29,32 @@ ax.legend(loc="upper left")
 # Function to update the plot with new data
 def update(frame):
     data.generateNextData()
-    
-    # Limit data to 30 most recent seconds
-    data.limitData(30)
-    
-    # Detect anomaly
+
+    # Check if the latest data point is an anomaly
+       # Detect anomaly
     is_anomaly = detect(data)
     if is_anomaly:
         data.setLastDataAsAnomaly()
 
-    # Update the line data with new values
+    df = data.data
+
+    data.limitData(30)
+    
+
+      # Update the line data with new values
     line.set_xdata(data.getDataIndex())
     line.set_ydata(data.getTemperatureData())
 
     # Highlight anomalies on the plot
-    anomaly_points.set_xdata(data.getDataIndex()[data.getAnomalyData()])
-    anomaly_points.set_ydata(data.getAnomalyData())
+    anomaly_points.set_xdata(data.getAnomalyDataIndex())
+    anomaly_points.set_ydata(data.getAnomalyDataTemperature())
     
     # Dynamically adjust the x-limits as new data is added
     ax.set_xlim([data.getDataIndex()[0], data.getDataIndex()[-1] + pd.Timedelta(seconds=1)])
 
-    # Return the updated plot elements
+
+    # Return the updated line for the animation
     return line, anomaly_points
 
-# Set up the animation
-ani = animation.FuncAnimation(fig=fig, func=update, interval=1000)
-
-# Show the plot
+ani = animation.FuncAnimation(fig=fig, func=update, interval=100)
 plt.show()

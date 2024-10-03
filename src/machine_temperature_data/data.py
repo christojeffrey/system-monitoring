@@ -20,7 +20,8 @@ class MachineTemperatureData:
             'Temperature': [initial_temp],
             'RealTemperature': [initial_temp],
             'Noise': [0],
-            'is_working': [True]
+            'is_working': [True],
+            'is_anomaly': [False]
         }, index=pd.date_range(start="2024-01-01 00:00:00", periods=1))
 
     
@@ -71,10 +72,11 @@ class MachineTemperatureData:
             'RealTemperature': [new_real_temp],
             'Noise': [noise],
             'Temperature': [new_temp],
-            'is_working': [is_working]
+            'is_working': [is_working],
+            'is_anomaly': [False]
         }, index=[new_index])
         
-        return pd.concat([self.data, new_data])
+        self.data = pd.concat([self.data, new_data])
 
 
     def setLastDataAsAnomaly(self):
@@ -86,8 +88,10 @@ class MachineTemperatureData:
     def getTemperatureData(self):
         return self.data['Temperature']
 
-    def getAnomalyData(self):
-        return self.data[self.data['is_anomaly'] == True]['is_anomaly']
+    def getAnomalyDataIndex(self):
+        return self.data[self.data['is_anomaly'] == True].index
+    def getAnomalyDataTemperature(self):
+        return self.data[self.data['is_anomaly'] == True]['Temperature']
     
     def getLastTemperature(self):
         return  self.data['Temperature'].iloc[-1]

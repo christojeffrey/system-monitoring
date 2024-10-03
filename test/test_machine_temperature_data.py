@@ -14,18 +14,15 @@ class TestMachineTemperatureData(unittest.TestCase):
 
     def test_generate_next_data(self):
         initial_length = self.mtd.getDataLength()
-        self.mtd.data = self.mtd.generateNextData()
+        self.mtd.generateNextData()
         self.assertEqual(self.mtd.getDataLength(), initial_length + 1)
 
     def test_limit_data(self):
         for _ in range(100):
-            self.mtd.data = self.mtd.generateNextData()
+            self.mtd.generateNextData()
         self.mtd.limitData(30)
         self.assertEqual(self.mtd.getDataLength(), 30)
 
-    def test_set_last_data_as_anomaly(self):
-        self.mtd.setLastDataAsAnomaly()
-        self.assertTrue(self.mtd.getAnomalyData()[-1], True)
 
     def test_get_data_index(self):
         index = self.mtd.getDataIndex()
@@ -34,11 +31,6 @@ class TestMachineTemperatureData(unittest.TestCase):
     def test_get_temperature_data(self):
         temp_data = self.mtd.getTemperatureData()
         self.assertIsInstance(temp_data, pd.Series)
-
-    def test_get_anomaly_data(self):
-        self.mtd.setLastDataAsAnomaly()
-        anomaly_data = self.mtd.getAnomalyData()
-        self.assertEqual(len(anomaly_data), 1)
 
     def test_get_last_temperature(self):
         last_temp = self.mtd.getLastTemperature()

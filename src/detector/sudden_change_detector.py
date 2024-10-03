@@ -9,7 +9,7 @@ class SuddenChangeDetector:
         self.ANOMALY_THRESHOLD = ANOMALY_THRESHOLD
     
     def detect(self, data):
-        temp = data['Temperature'].iloc[-1]
+        temp = data.getLastTemperature()
 
         # Add the new temperature to the window
         self.window.append(temp)
@@ -18,7 +18,7 @@ class SuddenChangeDetector:
 
         # If we don't have enough data points yet, return normal
         if len(self.window) < self.WINDOW_SIZE:
-            return False, "Normal"
+            return False
 
         # Calculate moving average and standard deviation
         moving_avg = np.mean(self.window)
