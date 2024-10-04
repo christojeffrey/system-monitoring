@@ -26,8 +26,7 @@ class TestSuddenChangeDetector(unittest.TestCase):
 
     def test_detect_anomaly(self):
         mock_data = Mock()
-        mock_data.getLastTemperature.return_value = 30.0
-        mock_data.getLastTemperatureThatsNotAnomaly.return_value = [24.5, 24.8, 25.2, 25.0, 24.7, 25.1, 24.9, 25.3, 24.6, 25.2]
+        mock_data.getLastTemperature.side_effect = [30.0,[24.5, 24.8, 25.2, 25.0, 24.7, 25.1, 24.9, 25.3, 24.6, 25.2]]
         
         result = self.detector.detect(mock_data)
         self.assertTrue(result)
