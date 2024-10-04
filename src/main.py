@@ -7,22 +7,35 @@ from detector.threshold_detector import ThresholdDetector
 from temperature_anomaly_plotter.temperature_anomaly_plotter import TemperatureAnomalyPlotter
 
 
-
-
-
 DATA_LIMIT = 30
+MACHINE_MIN_TEMPERATURE = 20
+MACHINE_MAX_TEMPERATURE = 80
+NOISE_RANGE = 80
+NOISE_PROBABILITY = 0.1
+WORKING_FLIP_PROBABILITY = 0.2
+
+SENSOR_MIN_TEMPERATURE = 10
+SENSOR_MAX_TEMPERATURE = 90
+
+SUDDEN_CHANGE_DETECTOR_WINDOW_SIZE = 10
+SUDDEN_CHANGE_DETECTOR_ANOMALY_THRESHOLD = 2.5
+
+PLOTTER_MIN_Y_AXIS = 0
+PLOTTER_MAX_Y_AXIS = 100
+PLOTTER_X_RANGE = 30
 
 '''
     1. step one: setup the data and visualization
 '''
+
 # Initialize data and detectors
-data = MachineTemperatureData(20, 80, 80, 0.1, 0.2)
-threshold_detector = ThresholdDetector(10, 90)
-sudden_change_detector = SuddenChangeDetector(WINDOW_SIZE=10, ANOMALY_THRESHOLD=2.5)
+data = MachineTemperatureData(MACHINE_MIN_TEMPERATURE, MACHINE_MAX_TEMPERATURE, NOISE_RANGE, NOISE_PROBABILITY, WORKING_FLIP_PROBABILITY)
+threshold_detector = ThresholdDetector(SENSOR_MIN_TEMPERATURE, SENSOR_MAX_TEMPERATURE)
+sudden_change_detector = SuddenChangeDetector(SUDDEN_CHANGE_DETECTOR_WINDOW_SIZE, SUDDEN_CHANGE_DETECTOR_ANOMALY_THRESHOLD)
 
 detectors = [threshold_detector, sudden_change_detector]
 
-plotter = TemperatureAnomalyPlotter(MIN_Y_AXIS=0, MAX_Y_AXIS=100, X_RANGE=30)
+plotter = TemperatureAnomalyPlotter(PLOTTER_MIN_Y_AXIS, PLOTTER_MAX_Y_AXIS, PLOTTER_X_RANGE)
 
 def update():
     # Update the data
