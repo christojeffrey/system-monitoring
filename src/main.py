@@ -6,6 +6,7 @@ from detector.threshold_detector import ThresholdDetector
 
 from temperature_anomaly_plotter.temperature_anomaly_plotter import TemperatureAnomalyPlotter
 
+# configuration
 
 DATA_LIMIT = 30
 
@@ -29,7 +30,8 @@ PLOTTER_MIN_Y_AXIS = 0
 PLOTTER_MAX_Y_AXIS = 100
 PLOTTER_X_RANGE = 30
 
-ANIMATION_INTERVAL_MILLISECOND = 20
+# if you want the x axis to match real time, set the interval to 1000
+ANIMATION_INTERVAL_MILLISECOND = 100
 
 
 '''
