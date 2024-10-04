@@ -90,6 +90,8 @@ class MachineTemperatureData:
 
     def getAnomalyDataIndex(self):
         return self.data[self.data['is_anomaly'] == True].index
+    
+
     def getAnomalyDataTemperature(self):
         return self.data[self.data['is_anomaly'] == True]['Temperature']
     
@@ -98,3 +100,15 @@ class MachineTemperatureData:
     
     def getDataLength(self):
         return len(self.data)
+    
+
+    def getLastTemperatureThatsNotAnomaly(self, limit):
+        # Get the last n temperature values that are not anomalies. if the number of non-anomalies is less than n,
+        # return what is available
+        non_anomalies = self.data[self.data['is_anomaly'] == False]
+        if len(non_anomalies) < limit:
+            return non_anomalies['Temperature']
+        else:
+            return non_anomalies['Temperature'].iloc[-limit:]
+        
+        

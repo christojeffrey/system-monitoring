@@ -1,60 +1,58 @@
-import matplotlib.pyplot as plt
-import pandas as pd
-import matplotlib.animation as animation
+# import pandas as pd
+
+
+
+
 from machine_temperature_data.data import MachineTemperatureData
+
+
 from detector.detector import detect
+from detector.sudden_change_detector import SuddenChangeDetector
+from detector.threshold_detector import ThresholdDetector
 
-# Initialize data
+
+from temperature_anomaly_plotter import TemperatureAnomalyPlotter
+
+
+# import matplotlib.pyplot as plt
+
+
+
+DATA_LIMIT = 30
+
+'''
+    1. step one: setup the data and visualization
+'''
+# Initialize data and detectors
 data = MachineTemperatureData(20, 80, 80, 0.1, 0.2)
+threshold_detector = ThresholdDetector(10, 90)
+sudden_change_detector = SuddenChangeDetector(WINDOW_SIZE=10, ANOMALY_THRESHOLD=2.5)
 
-def setupPlot():
-    # Create figure and axis
-    fig, ax = plt.subplots()
-    
-    # Set axis limits and labels
-    ax.set_xlim([data.getDataIndex()[0], data.getDataIndex()[0] + pd.Timedelta(seconds=30)])
-    ax.set_ylim([0, 100])
-    ax.set(xlabel='Time', ylabel='Temperature [°C]')
-    
-    return fig, ax
+detectors = [threshold_detector, sudden_change_detector]
 
-fig, ax = setupPlot()
-
-# Create initial plot elements (line and anomaly points)
-line, = ax.plot(data.getDataIndex(), data.getTemperatureData(), label='Temperature over Time')
-anomaly_points, = ax.plot([], [], 'ro', label='Anomaly')
-
-ax.legend(loc="upper left")
+plotter = TemperatureAnomalyPlotter(MIN_Y_AXIS=0, MAX_Y_AXIS=100, X_RANGE=30)
 
 # Function to update the plot with new data
-def update(frame):
+def update():
+    # Update the data
     data.generateNextData()
 
-    # Check if the latest data point is an anomaly
-       # Detect anomaly
-    is_anomaly = detect(data)
+    is_anomaly = detect(data, detectors)
     if is_anomaly:
         data.setLastDataAsAnomaly()
 
-    df = data.data
+    data.limitData(DATA_LIMIT)
 
-    data.limitData(30)
-    
+    # Update the plot with the new data
+    plotter.updateLineData(X=data.getDataIndex(), Y=data.getTemperatureData())
+    plotter.updateAnomalyData(X=data.getAnomalyDataIndex(), Y=data.getAnomalyDataTemperature())
 
-      # Update the line data with new values
-    line.set_xdata(data.getDataIndex())
-    line.set_ydata(data.getTemperatureData())
+    plotter.adjustXAxisLimit(start=data.getDataIndex()[0])
 
-    # Highlight anomalies on the plot
-    anomaly_points.set_xdata(data.getAnomalyDataIndex())
-    anomaly_points.set_ydata(data.getAnomalyDataTemperature())
-    
-    # Dynamically adjust the x-limits as new data is added
-    ax.set_xlim([data.getDataIndex()[0], data.getDataIndex()[-1] + pd.Timedelta(seconds=1)])
+'''
+    2. show the animation which will call update function every second
+'''
 
+plotter.setupAnimation(func=update, interval=100)
 
-    # Return the updated line for the animation
-    return line, anomaly_points
-
-ani = animation.FuncAnimation(fig=fig, func=update, interval=100)
-plt.show()
+plotter.show()

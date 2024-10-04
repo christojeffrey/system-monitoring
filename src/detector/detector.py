@@ -1,18 +1,20 @@
-from detector.sudden_change_detector import SuddenChangeDetector
-from detector.threshold_detector import ThresholdDetector 
+
+from typing import List
+from machine_temperature_data.data import MachineTemperatureData
 
 
-threshold_detector = ThresholdDetector(10, 90)
-sudden_change_detector = SuddenChangeDetector(10, 2)
 
-def detect(data):
-    res = threshold_detector.detect(data)
-    if(res):
-        print("threshold detected")
-        return True
+# makeshift interface
+class Detector:
+    def detect(self, data: MachineTemperatureData) -> bool:
+        pass
+
+
+def detect(data: MachineTemperatureData, detectors : List[Detector]) -> bool:
+    for detector in detectors:
+        res = detector.detect(data)
+        if(res):
+            print("detector:", detector)
+            return True
     
-    res_sudden_change = sudden_change_detector.detect(data)
-    if(res_sudden_change):
-        print("sudden change detected")
-        return True
     return False
