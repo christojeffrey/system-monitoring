@@ -28,8 +28,13 @@ to use the virtual environment, active it first before you install and run the c
 
 1. install the requirement using
 
+```bash
+pip install -r requirements.txt 
 ```
-pip install -r requirements.txt
+or install pandas and matplotlib manually
+
+```bash
+pip install pandas matplotlib
 ```
 
 2. to run
