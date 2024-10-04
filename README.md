@@ -1,8 +1,8 @@
 # What is this
 
-it's a **system monitoring simulation**. It simulates the reading **temperature** sensor from a system which is represented as a floating number, presented in a continuous data stream.
+it's a **system monitoring simulation**. It simulates the reading of **temperature** sensor from a system which is represented as a floating number, presented in a continuous data stream.
 
-as those data come, they will be **processed by anomaly detectors**, which will mark it whether it's an anomaly or not.
+as those data came, they will be **processed by anomaly detectors**, which will mark it whether it's an anomaly or not.
 
 this system monitoring will be displayed **as a graph** in real-time. the graph will show the **data stream as a line**, and the **anomaly as a red dot**.
 
