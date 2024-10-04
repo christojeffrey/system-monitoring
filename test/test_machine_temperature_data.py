@@ -4,7 +4,7 @@ from src.machine_temperature_data.machine_temperature_data import MachineTempera
 
 class TestMachineTemperatureData(unittest.TestCase):
     def setUp(self):
-        self.mtd = MachineTemperatureData(20, 80, 2, 0.1, 0.05)
+        self.mtd = MachineTemperatureData(20, 80, 2, 0.1, 0.05, 0.025)
 
     def test_init(self):
         self.assertIsInstance(self.mtd.data, pd.DataFrame)

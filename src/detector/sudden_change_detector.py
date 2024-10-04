@@ -1,7 +1,10 @@
 import numpy as np
 
-# detect using moving average
 class SuddenChangeDetector:
+    '''
+        Detects anomalies by comparing the current temperature with the moving average of the last n temperatures.
+        if the different is too much, that it's an anomaly
+    '''
     # the lower the anomaly threshold, the more sensitive the detector is to sudden changes
     def __init__(self, WINDOW_SIZE, ANOMALY_THRESHOLD):
         if not isinstance(WINDOW_SIZE, int) or WINDOW_SIZE <= 0:
@@ -14,8 +17,9 @@ class SuddenChangeDetector:
     
     def detect(self, data):
         temp = data.getLastTemperature()
-        
-        window = data.getLastTemperatureThatsNotAnomaly(10)
+        window = data.getLastTemperature(10)
+        # window = data.getLastTemperatureThatsNotAnomaly(10)
+
 
         # Calculate moving average and standard deviation
         moving_avg = np.mean(window)

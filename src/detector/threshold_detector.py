@@ -8,10 +8,8 @@ class ThresholdDetector:
             raise ValueError("MIN must be less than MAX")
         self.MIN = MIN
         self.MAX = MAX
-
    
     def detect(self, data):
-        # temp = data['Temperature'].iloc[-1]
         temp = data.getLastTemperature()
         
         # Detect if temperature is out of working range
