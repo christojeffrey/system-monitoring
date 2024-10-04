@@ -1,6 +1,6 @@
 import unittest
 import pandas as pd
-from src.machine_temperature_data.data import MachineTemperatureData
+from machine_temperature_data.machine_temperature_data import MachineTemperatureData
 
 class TestMachineTemperatureData(unittest.TestCase):
     def setUp(self):

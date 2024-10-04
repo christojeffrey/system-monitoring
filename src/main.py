@@ -1,20 +1,12 @@
-# import pandas as pd
-
-
-
-
-from machine_temperature_data.data import MachineTemperatureData
-
+from machine_temperature_data.machine_temperature_data import MachineTemperatureData
 
 from detector.detector import detect
 from detector.sudden_change_detector import SuddenChangeDetector
 from detector.threshold_detector import ThresholdDetector
 
+from temperature_anomaly_plotter.temperature_anomaly_plotter import TemperatureAnomalyPlotter
 
-from temperature_anomaly_plotter import TemperatureAnomalyPlotter
 
-
-# import matplotlib.pyplot as plt
 
 
 
@@ -32,7 +24,6 @@ detectors = [threshold_detector, sudden_change_detector]
 
 plotter = TemperatureAnomalyPlotter(MIN_Y_AXIS=0, MAX_Y_AXIS=100, X_RANGE=30)
 
-# Function to update the plot with new data
 def update():
     # Update the data
     data.generateNextData()

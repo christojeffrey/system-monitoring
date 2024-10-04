@@ -1,6 +1,6 @@
 
 from typing import List
-from machine_temperature_data.data import MachineTemperatureData
+from machine_temperature_data.machine_temperature_data import MachineTemperatureData
 
 
 

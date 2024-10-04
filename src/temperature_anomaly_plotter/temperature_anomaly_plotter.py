@@ -16,7 +16,6 @@ class TemperatureAnomalyPlotter:
         self.axis = ax
         
         # Set axis limits and labels
-        # ax.set_xlim([data.getDataIndex()[0], data.getDataIndex()[0] + pd.Timedelta(seconds=DATA_LIMIT)])
         ax.set_ylim([MIN_Y_AXIS, MAX_Y_AXIS])
         ax.set(xlabel='Time', ylabel='Temperature [°C]')
 
