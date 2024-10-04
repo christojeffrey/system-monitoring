@@ -8,6 +8,7 @@ from temperature_anomaly_plotter.temperature_anomaly_plotter import TemperatureA
 
 
 DATA_LIMIT = 30
+
 MACHINE_MIN_TEMPERATURE = 20
 MACHINE_MAX_TEMPERATURE = 80
 NOISE_RANGE = 80

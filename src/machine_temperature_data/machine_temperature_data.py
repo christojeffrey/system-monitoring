@@ -8,6 +8,16 @@ import numpy as np
 # I notice that is was quite highly coupled. 
 class MachineTemperatureData:
     def __init__(self, MACHINE_MIN_TEMPERATURE, MACHINE_MAX_TEMPERATURE, NOISE_RANGE, NOISE_PROBABILITY, WORKING_FLIP_PROBABILITY):
+        # Input validation
+        if not isinstance(MACHINE_MIN_TEMPERATURE, (int, float)) or not isinstance(MACHINE_MAX_TEMPERATURE, (int, float)):
+            raise TypeError("Temperature limits must be numbers")
+        if MACHINE_MIN_TEMPERATURE >= MACHINE_MAX_TEMPERATURE:
+            raise ValueError("Min temperature must be less than max temperature")
+        if not isinstance(NOISE_RANGE, (int, float)) or NOISE_RANGE < 0:
+            raise ValueError("Noise range must be a non-negative number")
+        if not 0 <= NOISE_PROBABILITY <= 1 or not 0 <= WORKING_FLIP_PROBABILITY <= 1:
+            raise ValueError("Probabilities must be between 0 and 1")
+        
         self.MACHINE_MIN_TEMPERATURE = MACHINE_MIN_TEMPERATURE
         self.MACHINE_MAX_TEMPERATURE = MACHINE_MAX_TEMPERATURE
         self.NOISE_RANGE = NOISE_RANGE
@@ -26,13 +36,11 @@ class MachineTemperatureData:
 
     
     def limitData(self, limit: int) -> None:
-        # limit must be positive number
-        try:
-            if type(limit) is not int:
-                raise TypeError("limit must be a number")
-        except TypeError:
-            print("limit must be a number")
-          # Keep only the last 30 data points to keep it clean
+        if not isinstance(limit, int):
+            raise TypeError("limit must be an integer")
+        if limit <= 0:
+            raise ValueError("limit must be a positive number")
+        
         if len(self.data) > limit:
             self.data = self.data.iloc[-limit:]
     

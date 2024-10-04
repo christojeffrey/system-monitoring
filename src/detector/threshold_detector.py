@@ -1,7 +1,11 @@
 
 class ThresholdDetector:
     def __init__(self, MIN, MAX):
-        self.window = []
+
+        if not isinstance(MIN, (int, float)) or not isinstance(MAX, (int, float)):
+            raise TypeError("MIN and MAX must be numbers")
+        if MIN >= MAX:
+            raise ValueError("MIN must be less than MAX")
         self.MIN = MIN
         self.MAX = MAX
 

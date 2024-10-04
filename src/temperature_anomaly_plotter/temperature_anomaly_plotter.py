@@ -5,6 +5,12 @@ import matplotlib.animation as animation
 import pandas as pd
 class TemperatureAnomalyPlotter:
     def __init__(self, MIN_Y_AXIS, MAX_Y_AXIS, X_RANGE):
+        if not isinstance(MIN_Y_AXIS, (int, float)) or not isinstance(MAX_Y_AXIS, (int, float)):
+            raise TypeError("MIN_Y_AXIS and MAX_Y_AXIS must be numbers")
+        if MIN_Y_AXIS >= MAX_Y_AXIS:
+            raise ValueError("MIN_Y_AXIS must be less than MAX_Y_AXIS")
+        if not isinstance(X_RANGE, int) or X_RANGE <= 0:
+            raise ValueError("X_RANGE must be a positive integer")
         self.MIN_Y_AXIS = MIN_Y_AXIS
         self.MAX_Y_AXIS = MAX_Y_AXIS
         self.X_RANGE = X_RANGE
